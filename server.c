@@ -54,7 +54,36 @@ int server_listen(server_t* server) {
 
 // accepts new connections and then prints 'hello, world' to them.
 int server_accept(server_t* server) {
+    int err = 0;
+    int conn_fd;
+    socklen_t client_len;
 
+    struct sockaddr_in client_addr;
+
+    client_len = sizeof(client_addr);
+    err = (
+        conn_fd = accept(
+            server->listen_fd,
+            (struct sockaddr*)&client_addr,
+            &client_len
+        )
+    );
+    if (err == -1) {
+        perror("accept");
+        printf("Failed accepting connection\n");
+        return err;
+    }
+
+    printf("Client connect!\n");
+    
+    err = close(conn_fd);
+    if (err == -1) {
+        perror("close");
+        printf("Failed close connection\n");
+        return err;
+    }
+
+    return err;
 }
 
 int main(int argc, char *argv[])
