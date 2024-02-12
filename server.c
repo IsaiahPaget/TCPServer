@@ -75,7 +75,16 @@ int server_accept(server_t* server) {
     }
 
     printf("Client connect!\n");
+    ssize_t s = sendto(
+        conn_fd, 
+        "Super Secret Message\n", 
+        256, 
+        0,
+        (struct sockaddr*)&client_addr,
+        client_len
+    );
     
+    close(s);
     err = close(conn_fd);
     if (err == -1) {
         perror("close");
